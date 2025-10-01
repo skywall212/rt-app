@@ -3,7 +3,7 @@
 <html lang="id">
 <head>
     <meta charset="UTF-8">
-    <title>Laporan Keuangan RT.04 Tahun {{ $tahun }}</title>
+    <title>Laporan Keuangan Tahun {{ $tahun }}</title>
     <style>
         body { font-family: DejaVu Sans, sans-serif; font-size: 9px; }
         h3 { text-align: center; margin-bottom: 10px; }
