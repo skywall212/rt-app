@@ -10,9 +10,15 @@ class MasterWargaController extends Controller
 {
     public function index()
     {
-        $warga = MasterWarga::orderBy('nama')->get();
+        // 10 data per halaman, bisa diubah sesuai kebutuhan
+        //$warga = MasterWarga::orderBy('alamat')->paginate(50);  
+        $warga =MasterWarga::orderByRaw("
+            CAST(substring(alamat from 'G([0-9]+)') AS INTEGER) ASC,
+            CAST(substring(alamat from '/([0-9]+)') AS INTEGER) ASC
+        ")->paginate(20);
         return view('admin.masterwarga.index', compact('warga'));
     }
+
 
     public function create()
     {

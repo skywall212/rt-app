@@ -9,6 +9,11 @@
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
+    <div class="mt-3">
+    {{ $warga->links('pagination::bootstrap-4') }}
+    </div>
+
+
 
     <table class="table table-bordered">
         <thead>
