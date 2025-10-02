@@ -21,8 +21,50 @@
 - 🔒 **Auth Middleware** – Custom Authentication
 
 ---
+## ⚙️ Installation
+### 1. Clone Repository
 
- 
+git clone https://git.pjnhk.go.id/rifqi.permana/ujski.git
+cd ujski
+
+### 2. Install Dependencies
+composer install
+npm install && npm run dev
+
+### 3. Setup Environment
+cp .env.example .env
+php artisan key:generate
+
+### 4. Database Migration
+php artisan migrate --seed
+
+### 5. Run Development Server
+php artisan serve
+
+### 6. Config NGINX 
+
+server {
+    listen 80;
+    server_name opr.local;
+
+    root /home/pjnhk/ujski/public;
+
+    index index.php index.html;
+
+    location / {
+        try_files $uri $uri/ /index.php?$query_string;
+    }
+
+    location ~ \.php$ {
+        include snippets/fastcgi-php.conf;
+        fastcgi_pass unix:/var/run/php/php8.2-fpm.sock;
+        fastcgi_param SCRIPT_FILENAME $document_root$fastcgi_script_name;
+        include fastcgi_params;
+    }
+
+    client_max_body_size 100M;
+}
+
 ## 📂 Project Structure
 ```bash
 rt-app/
