@@ -83,8 +83,9 @@ server {
     client_max_body_size 100M;
 }
 
+---
 
-# 📖 Features
+## 📖 Features
 
 ✅ User Authentication & Authorization
 
@@ -96,7 +97,9 @@ server {
 
 ✅ Scalable & Secure
 
-👨‍💻 Author
+---
+
+## 👨‍💻 Author
 
 MRP DevOps
 🛠 Passionate about building reliable, secure, and scalable systems.
