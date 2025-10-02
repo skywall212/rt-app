@@ -4,6 +4,15 @@
 
 ---
 
+## 📸 Screenshots
+
+### Dashboard
+![Dashboard](public/images/screenshot-dashboard.png)
+
+### Login Page
+![Login](public/images/screenshot-login.png)
+
+
 ## 📌 Tech Stack
 - ⚡ **Laravel 12** – Backend Framework
 - 🐘 **PHP 8.2** – Runtime
