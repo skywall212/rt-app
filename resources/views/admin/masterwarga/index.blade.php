@@ -9,9 +9,15 @@
     @if(session('success'))
         <div class="alert alert-success">{{ session('success') }}</div>
     @endif
-    <div class="mt-3">
-    {{ $warga->links('pagination::bootstrap-4') }}
+    <div class="mt-3 d-flex justify-content-between align-items-center">
+        <div>
+            Menampilkan {{ $warga->firstItem() }} - {{ $warga->lastItem() }} dari {{ $warga->total() }} data
+        </div>
+        <div>
+            {{ $warga->links('pagination::bootstrap-4') }}
+        </div>
     </div>
+
 
 
 
@@ -48,5 +54,13 @@
             @endforelse
         </tbody>
     </table>
+    <div class="mt-3 d-flex justify-content-between align-items-center">
+        <div>
+            Menampilkan {{ $warga->firstItem() }} - {{ $warga->lastItem() }} dari {{ $warga->total() }} data
+        </div>
+        <div>
+            {{ $warga->links('pagination::bootstrap-4') }}
+        </div>
+    </div>
 </div>
 @endsection
