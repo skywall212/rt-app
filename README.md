@@ -66,7 +66,7 @@ server {
 }
 
 ## 📂 Project Structure
-```bash
+
 rt-app/
 ├── app/ # Core application (Controllers, Models, etc.)
 ├── bootstrap/
