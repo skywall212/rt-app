@@ -42,6 +42,7 @@ php artisan migrate --seed
 php artisan serve
 
 ### 6. Config NGINX 
+```
 
 server {
     listen 80;
@@ -64,10 +65,10 @@ server {
 
     client_max_body_size 100M;
 }
-
+```
 ## 📂 Project Structure
-
-rt-app/
+```
+ujski/
 ├── app/ # Core application (Controllers, Models, etc.)
 ├── bootstrap/
 ├── config/ # Configuration files
@@ -76,10 +77,23 @@ rt-app/
 ├── resources/ # Views (Blade), JS, CSS
 ├── routes/ # Web & API Routes
 └── tests/ # Unit & Feature tests
+```
+
+## 📖 Features
+
+✅ User Authentication & Authorization
+
+✅ CRUD Master Data
+
+✅ API Ready
+
+✅ Optimized for Nginx + PHP-FPM
+
+✅ Scalable & Secure
+
+## 👨‍💻 Author
+
+MRP DevOps
+🛠 Passionate about building reliable, secure, and scalable systems.
 
 
----
-
-
-
-## test
