@@ -23,24 +23,28 @@
 ---
 ## ⚙️ Installation
 ### 1. Clone Repository
-
+```
 git clone https://git.pjnhk.go.id/rifqi.permana/ujski.git
 cd ujski
-
+```
 ### 2. Install Dependencies
+```
 composer install
 npm install && npm run dev
-
+```
 ### 3. Setup Environment
+```
 cp .env.example .env
 php artisan key:generate
-
+```
 ### 4. Database Migration
+```
 php artisan migrate --seed
-
+```
 ### 5. Run Development Server
+```
 php artisan serve
-
+```
 ### 6. Config NGINX 
 ```
 
@@ -94,6 +98,7 @@ ujski/
 ## 👨‍💻 Author
 
 MRP DevOps
+
 ### 🛠 Passionate about building reliable, secure, and scalable systems.
 
 
