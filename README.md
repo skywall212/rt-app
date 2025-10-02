@@ -7,10 +7,10 @@
 ## 📸 Screenshots
 
 ### Dashboard
-![Dashboard](public/images/screenshot-dashboard.png)
+![Dashboard](public/logo/screenshot-dashboard.png)
 
 ### Login Page
-![Login](public/images/screenshot-login.png)
+![Login](public/logo/screenshot-login.png)
 
 
 ## 📌 Tech Stack
