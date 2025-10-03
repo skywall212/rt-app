@@ -1,4 +1,4 @@
-# 🚀 Aplikasi Rukun Tetangga untuk administrasi
+# 🚀 Aplikasi Rukun Tetangga untuk administrasi dan keuangan
 
 > Aplikasi ini dibangun dengan **Laravel 12**, berjalan di atas **PHP 8.2** dan **Nginx**, dikembangkan oleh **MRP DevOps**.
 
