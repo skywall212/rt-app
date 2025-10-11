@@ -52,7 +52,7 @@ server {
     listen 80;
     server_name opr.local;
 
-    root /home/pjnhk/ujski/public;
+    root /home/website/rt-app/public;
 
     index index.php index.html;
 
