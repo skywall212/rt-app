@@ -27,7 +27,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="alert"></button>
                 </div>
             @endif
-
+            
             {{-- Form Pencarian --}}
             <form method="GET" class="row g-2 mb-3">
                 <div class="col-md-4">

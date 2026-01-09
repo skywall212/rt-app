@@ -20,7 +20,7 @@ class Pembayaran extends Model
         'keterangan',
         'bukti_bayar',
     ];
-
+    // testing
     // Format tanggal otomatis ke Carbon
     protected $dates = ['tanggal'];
 
