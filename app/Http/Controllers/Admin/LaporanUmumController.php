@@ -15,14 +15,13 @@ class LaporanUmumController extends Controller
     {
         $tahun = $request->input('tahun', date('Y'));
 
-        $laporanSK        = $this->getLaporanByJenis('Sampah Keamanan', $tahun);
-        $laporanDansos    = $this->getLaporanByJenis('Dana Sosial', $tahun);
-        $laporanPulasara  = $this->getLaporanByJenis('Pulasara', $tahun);
+        $laporanSK       = $this->getLaporanByJenis('Sampah Keamanan', $tahun);
+        $laporanDansos   = $this->getLaporanByJenis('Dana Sosial', $tahun);
+        $laporanPulasara = $this->getLaporanByJenis('Pulasara', $tahun);
 
-        // Hitung total peserta pulasara
+        // total peserta pulasara (akumulasi)
         $totalPesertaPulasara = collect($laporanPulasara)->sum('peserta');
 
-        // Ambil data pengeluaran dari table pengeluarans
         $laporanPengeluaran = Pengeluaran::whereYear('tanggal', $tahun)
             ->orderBy('tanggal', 'asc')
             ->get();
@@ -41,12 +40,12 @@ class LaporanUmumController extends Controller
     {
         $tahun = $request->input('tahun', date('Y'));
 
-        $laporanSK        = $this->getLaporanByJenis('Sampah Keamanan', $tahun);
-        $laporanDansos    = $this->getLaporanByJenis('Dana Sosial', $tahun);
-        $laporanPulasara  = $this->getLaporanByJenis('Pulasara', $tahun);
+        $laporanSK       = $this->getLaporanByJenis('Sampah Keamanan', $tahun);
+        $laporanDansos   = $this->getLaporanByJenis('Dana Sosial', $tahun);
+        $laporanPulasara = $this->getLaporanByJenis('Pulasara', $tahun);
+
         $totalPesertaPulasara = collect($laporanPulasara)->sum('peserta');
 
-        // Ambil data pengeluaran dari table pengeluarans
         $laporanPengeluaran = Pengeluaran::whereYear('tanggal', $tahun)
             ->orderBy('tanggal', 'asc')
             ->get();
@@ -63,42 +62,72 @@ class LaporanUmumController extends Controller
         return $pdf->stream("laporan-umum-{$tahun}.pdf");
     }
 
-    private function getLaporanByJenis($jenis, $tahun)
+    /**
+     * 🔹 Ambil laporan per jenis pembayaran
+     * 🔹 Menggunakan field bulan_bayar
+     */
+    private function getLaporanByJenis(string $jenis, int $tahun): array
     {
-        $pembayarans = Pembayaran::where('jenis', $jenis)
+        // mapping bulan_bayar → angka bulan
+        $mapBulan = [
+            'Januari'   => 1,
+            'Februari'  => 2,
+            'Maret'     => 3,
+            'April'     => 4,
+            'Mei'       => 5,
+            'Juni'      => 6,
+            'Juli'      => 7,
+            'Agustus'   => 8,
+            'September' => 9,
+            'Oktober'   => 10,
+            'November'  => 11,
+            'Desember'  => 12,
+        ];
+
+        $pembayarans = Pembayaran::with('warga')
+            ->where('jenis', $jenis)
             ->whereYear('tanggal', $tahun)
-            ->with('warga')
+            ->whereNotNull('bulan_bayar')
             ->get();
 
         $laporan = [];
 
         foreach ($pembayarans as $pembayaran) {
+
+            // skip jika bulan tidak valid
+            if (!isset($mapBulan[$pembayaran->bulan_bayar])) {
+                continue;
+            }
+
+            $bulanKe = $mapBulan[$pembayaran->bulan_bayar];
             $wargaId = $pembayaran->warga_id;
-            $nama    = $pembayaran->warga->nama ?? '-';
-            $alamat  = $pembayaran->warga->alamat ?? '-';
-            $peserta = $pembayaran->peserta ?? 0;
-            $jumlah  = $pembayaran->jumlah;
-            $tanggal = Carbon::parse($pembayaran->tanggal)->format('d/m/Y');
-            $bulanKe = Carbon::parse($pembayaran->tanggal)->month;
 
             if (!isset($laporan[$wargaId])) {
                 $laporan[$wargaId] = [
-                    'nama'    => $nama,
-                    'alamat'  => $alamat,
-                    'peserta' => $peserta,
-                    'bulan'   => array_fill(1, 12, ['jumlah' => 0, 'tanggal' => null]),
+                    'nama'    => $pembayaran->warga->nama ?? '-',
+                    'alamat'  => $pembayaran->warga->alamat ?? '-',
+                    'peserta' => $pembayaran->peserta ?? 0,
+                    'bulan'   => array_fill(1, 12, [
+                        'jumlah'  => 0,
+                        'tanggal' => null
+                    ]),
                     'total'   => 0,
                 ];
             }
 
+            // isi data per bulan
             $laporan[$wargaId]['bulan'][$bulanKe] = [
-                'jumlah'  => $jumlah,
-                'tanggal' => $tanggal,
+                'jumlah'  => $pembayaran->jumlah,
+                'tanggal' => Carbon::parse($pembayaran->tanggal)->format('d/m/Y'),
             ];
 
-            $laporan[$wargaId]['total'] += $jumlah;
+            // akumulasi total
+            $laporan[$wargaId]['total'] += $pembayaran->jumlah;
         }
 
-        return collect($laporan)->sortBy('nama')->values()->toArray();
+        return collect($laporan)
+            ->sortBy('nama')
+            ->values()
+            ->toArray();
     }
 }

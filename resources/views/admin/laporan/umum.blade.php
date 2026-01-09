@@ -35,12 +35,13 @@
     </div>
 
     {{-- ===========================
-        1. LAPORAN SAMPAH & KEAMANAN
+     1. LAPORAN SAMPAH & KEAMANAN
     ============================ --}}
     <div class="card shadow mb-4">
         <div class="card-header bg-success text-white">
             <b>Pemasukan Sampah & Keamanan</b>
         </div>
+
         <div class="card-body table-responsive">
             <table class="table table-bordered text-center align-middle">
                 <thead class="table-success">
@@ -48,37 +49,58 @@
                         <th>No</th>
                         <th>Nama</th>
                         <th>Alamat</th>
-                        @for($i=1;$i<=12;$i++)
+                        @for($i = 1; $i <= 12; $i++)
                             <th>{{ strtoupper(date('M', mktime(0,0,0,$i,1))) }}</th>
                         @endfor
                         <th>Total</th>
                     </tr>
                 </thead>
+
                 <tbody>
-                    @php $no=1; $totalSK=0; @endphp
-                    @foreach($laporanSK as $row)
+                    @php $no = 1; $totalSK = 0; @endphp
+
+                    @forelse($laporanSK as $row)
                         <tr>
                             <td>{{ $no++ }}</td>
-                            <td>{{ $row['nama'] }}</td>
-                            <td>{{ $row['alamat'] }}</td>
-                            @foreach($row['bulan'] as $bulan)
+                            <td class="text-start">{{ $row['nama'] }}</td>
+                            <td class="text-start">{{ $row['alamat'] }}</td>
+
+                            @for($i = 1; $i <= 12; $i++)
                                 <td>
-                                    @if($bulan['jumlah'] > 0)
-                                        Rp{{ number_format($bulan['jumlah'],0,',','.') }}<br>
-                                        <small>{{ $bulan['tanggal'] }}</small>
+                                    @if($row['bulan'][$i]['jumlah'] > 0)
+                                        <div class="fw-bold">
+                                            Rp{{ number_format($row['bulan'][$i]['jumlah'],0,',','.') }}
+                                        </div>
+                                        @if($row['bulan'][$i]['tanggal'])
+                                            <small class="text-muted">
+                                                {{ $row['bulan'][$i]['tanggal'] }}
+                                            </small>
+                                        @endif
                                     @else
                                         -
                                     @endif
                                 </td>
-                            @endforeach
-                            <td><b>Rp{{ number_format($row['total'],0,',','.') }}</b></td>
+                            @endfor
+
+                            <td>
+                                <b>Rp{{ number_format($row['total'],0,',','.') }}</b>
+                            </td>
                         </tr>
+
                         @php $totalSK += $row['total']; @endphp
-                    @endforeach
+                    @empty
+                        <tr>
+                            <td colspan="16" class="text-muted text-center">
+                                Belum ada data pembayaran
+                            </td>
+                        </tr>
+                    @endforelse
                 </tbody>
             </table>
+
             <div class="fw-bold mt-2">
-                Total Pembayaran Sampah & Keamanan : Rp{{ number_format($totalSK,0,',','.') }}
+                Total Pembayaran Sampah & Keamanan :
+                Rp{{ number_format($totalSK,0,',','.') }}
             </div>
         </div>
     </div>
