@@ -59,6 +59,24 @@
             </select>
         </div>
 
+        {{-- Bulan Pembayaran --}}
+        
+        <div class="mb-3">
+            <label for="bulan_bayar" class="form-label">Bulan</label>
+            <select name="bulan_bayar" id="bulan_bayar" class="form-select">
+                <option value="">-- Pilih Bulan --</option>
+                @foreach ([
+                    'Januari','Februari','Maret','April','Mei','Juni',
+                    'Juli','Agustus','September','Oktober','November','Desember'
+                ] as $bulan)
+                    <option value="{{ $bulan }}" {{ old('bulan_bayar') == $bulan ? 'selected' : '' }}>
+                        {{ $bulan }}
+                    </option>
+                @endforeach
+            </select>
+        </div>
+
+
         {{-- Input Tambahan khusus Pulasara --}}
         <div id="pulasara-fields" style="display: none;">
             <div class="mb-3">

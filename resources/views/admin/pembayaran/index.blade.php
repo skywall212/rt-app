@@ -66,7 +66,8 @@
                         <tr>
                             <th>No</th>
                             <th>Nama Warga</th>
-                            <th>Tanggal</th>
+                            <th>Tgl Bayar</th>
+                            <th>Bulan Bayar</th>
                             <th>Jenis</th>
                             <th>Jumlah</th>
                             <th>Keterangan</th>
@@ -80,6 +81,7 @@
                             <td>{{ ($pembayarans->currentPage() - 1) * $pembayarans->perPage() + $loop->iteration }}</td>
                             <td>{{ $pembayaran->warga->nama ?? 'Tidak diketahui' }}</td>
                             <td>{{ \Carbon\Carbon::parse($pembayaran->tanggal)->format('d/m/Y') }}</td>
+                            <td>{{ $pembayaran->bulan_bayar }}</td>
                             <td><span class="badge bg-primary">{{ $pembayaran->jenis }}</span></td>
                             <td class="text-success fw-bold">
                                 Rp {{ number_format($pembayaran->jumlah, 0, ',', '.') }}

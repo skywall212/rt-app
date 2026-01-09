@@ -15,6 +15,7 @@ class Pembayaran extends Model
         'tanggal',
         'jenis',
         'jumlah',
+        'bulan_bayar',
         'peserta',
         'keterangan',
         'bukti_bayar',
