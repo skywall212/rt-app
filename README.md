@@ -101,4 +101,20 @@ MRP DevOps
 
 ### 🛠 Passionate about building reliable, secure, and scalable systems.
 
+---
 
+## ☕ Support Project
+
+Jika project ini bermanfaat dan membantu pekerjaan Anda,  
+Anda bisa memberikan dukungan melalui Saweria:
+
+<p align="center">
+  <a href="https://saweria.co/mrpstudio" target="_blank">
+    <img src="https://img.shields.io/badge/Support-Saweria-orange?style=for-the-badge&logo=buymeacoffee" alt="Support via Saweria">
+  </a>
+</p>
+
+Setiap dukungan Anda sangat berarti untuk pengembangan project ini.  
+Terima kasih 🙏
+
+---
