@@ -12,33 +12,42 @@ class LaporanDansosController extends Controller
 {
     public function index(Request $request)
     {
-        $tahun = $request->input('tahun', date('Y'));
+        $tahun   = $request->input('tahun', date('Y'));
         $laporan = $this->getLaporanDansos($tahun);
 
         $totalPeserta = count($laporan);
-        $grandTotal = array_sum(array_column($laporan, 'total'));
+        $grandTotal   = array_sum(array_column($laporan, 'total'));
 
-        return view('admin.laporan.dansos', compact('laporan', 'tahun', 'totalPeserta', 'grandTotal'));
+        return view('admin.laporan.dansos', compact(
+            'laporan',
+            'tahun',
+            'totalPeserta',
+            'grandTotal'
+        ));
     }
 
     public function exportPdf(Request $request)
     {
-        $tahun = $request->input('tahun', date('Y'));
+        $tahun   = $request->input('tahun', date('Y'));
         $laporan = $this->getLaporanDansos($tahun);
 
         $totalPeserta = count($laporan);
-        $grandTotal = array_sum(array_column($laporan, 'total'));
+        $grandTotal   = array_sum(array_column($laporan, 'total'));
 
-        $pdf = Pdf::loadView('admin.laporan.dansos_pdf', compact('laporan', 'tahun', 'totalPeserta', 'grandTotal'))
-                  ->setPaper('a4', 'landscape');
+        $pdf = Pdf::loadView('admin.laporan.dansos_pdf', compact(
+            'laporan',
+            'tahun',
+            'totalPeserta',
+            'grandTotal'
+        ))->setPaper('a4', 'landscape');
 
         return $pdf->stream("laporan_dansos_{$tahun}.pdf");
     }
 
     /**
-     * 🔹 Ambil dan mapping data laporan Dansos per tahun
-     *    -> setiap $item['bulan'][1..12] menjadi array:
-     *       ['jumlah' => 0|nominal, 'tanggal' => 'YYYY-MM-DD'|null]
+     * ===============================
+     * LAPORAN DANSOS (PAKAI bulan_bayar)
+     * ===============================
      */
     private function getLaporanDansos($tahun)
     {
@@ -47,45 +56,70 @@ class LaporanDansosController extends Controller
             ->with('warga')
             ->get();
 
+        // Mapping nama bulan → index kolom
+        $mapBulan = [
+            'Januari'   => 1,
+            'Februari'  => 2,
+            'Maret'     => 3,
+            'April'     => 4,
+            'Mei'       => 5,
+            'Juni'      => 6,
+            'Juli'      => 7,
+            'Agustus'   => 8,
+            'September' => 9,
+            'Oktober'   => 10,
+            'November'  => 11,
+            'Desember'  => 12,
+        ];
+
         $laporan = [];
 
         foreach ($pembayarans as $pembayaran) {
-            $wargaId = $pembayaran->warga_id;
-            $nama    = $pembayaran->warga->nama ?? '-';
-            $alamat  = $pembayaran->warga->alamat ?? '-';
-            $peserta = $pembayaran->peserta ?? 0;
-            $jumlah  = $pembayaran->jumlah;
-            $bulanKe = Carbon::parse($pembayaran->tanggal)->month;
-            $tanggal = Carbon::parse($pembayaran->tanggal)->format('Y-m-d');
 
-            // inisialisasi data warga jika belum ada
+            // 🔒 Skip jika bulan_bayar kosong
+            if (empty($pembayaran->bulan_bayar)) {
+                continue;
+            }
+
+            $bulanKe = $mapBulan[$pembayaran->bulan_bayar] ?? null;
+            if (!$bulanKe) {
+                continue;
+            }
+
+            $wargaId = $pembayaran->warga_id;
+
             if (!isset($laporan[$wargaId])) {
                 $laporan[$wargaId] = [
-                    'nama' => $nama,
-                    'alamat' => $alamat,
-                    'peserta' => $peserta,
-                    'bulan' => array_fill(1, 12, ['jumlah' => 0, 'tanggal' => null]),
+                    'nama'   => $pembayaran->warga->nama ?? '-',
+                    'alamat' => $pembayaran->warga->alamat ?? '-',
+                    'bulan'  => array_fill(1, 12, [
+                        'jumlah'  => 0,
+                        'tanggal' => null,
+                    ]),
                     'jumlah_bulan' => 0,
                     'total' => 0,
                 ];
             }
 
-            // isi data bulan sesuai transaksi
+            // isi bulan berdasarkan bulan_bayar
             $laporan[$wargaId]['bulan'][$bulanKe] = [
-                'jumlah' => $jumlah,
-                'tanggal' => $tanggal,
+                'jumlah'  => $pembayaran->jumlah,
+                'tanggal' => Carbon::parse($pembayaran->tanggal)->format('d/m/Y'),
             ];
 
-            // update total
-            $laporan[$wargaId]['total'] += $jumlah;
+            $laporan[$wargaId]['total'] += $pembayaran->jumlah;
         }
 
-        // hitung jumlah bulan terisi per warga
-        foreach ($laporan as &$item) {
-            $item['jumlah_bulan'] = collect($item['bulan'])->filter(fn($b) => $b['jumlah'] > 0)->count();
+        // hitung jumlah bulan terisi
+        foreach ($laporan as &$row) {
+            $row['jumlah_bulan'] = collect($row['bulan'])
+                ->filter(fn ($b) => $b['jumlah'] > 0)
+                ->count();
         }
 
-        return collect($laporan)->sortBy('nama')->values()->toArray();
+        return collect($laporan)
+            ->sortBy('nama')
+            ->values()
+            ->toArray();
     }
-
 }

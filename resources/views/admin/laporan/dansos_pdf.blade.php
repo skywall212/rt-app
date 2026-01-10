@@ -24,7 +24,7 @@
                 <th>NO</th>
                 <th>NAMA</th>
                 <th>ALAMAT</th>
-                <th>PESERTA</th>
+                
                 <th>JAN</th><th>FEB</th><th>MAR</th><th>APR</th>
                 <th>MEI</th><th>JUN</th><th>JUL</th><th>AGUST</th>
                 <th>SEPT</th><th>OKT</th><th>NOV</th><th>DES</th>
@@ -37,8 +37,8 @@
                 <tr>
                     <td>{{ $loop->iteration }}</td>
                     <td style="text-align:left;">{{ $item['nama'] }}</td>
-                    <td style="text-align:left;">{{ $item['alamat'] }}</td>
-                    <td>{{ $item['peserta'] }}</td>
+                    <td style="text-align:center;">{{ $item['alamat'] }}</td>
+                    
 
                     @for($i = 1; $i <= 12; $i++)
                         <td>
