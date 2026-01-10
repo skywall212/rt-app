@@ -24,8 +24,8 @@
 ## ⚙️ Installation
 ### 1. Clone Repository
 ```
-git clone https://git.pjnhk.go.id/rifqi.permana/ujski.git
-cd ujski
+git clone https://github.com/skywall212/rt-app
+cd rt-app
 ```
 ### 2. Install Dependencies
 ```
