@@ -53,7 +53,8 @@
                 <tr class="text-center">
                     <th class="bg-primary text-white" style="width: 50px;">No</th>
                     <th class="bg-primary text-white" style="width: 130px;">Nama</th>
-                    <th class="bg-primary text-white" style="width: 130px;">Tanggal</th>
+                    <th class="bg-primary text-white" style="width: 130px;">Tanggal Bayar</th>
+                    <th class="bg-primary text-white" style="width: 130px;">Bulan </th>
                     <th class="bg-primary text-white" style="width: 220px;">Jenis</th>
                     <th class="bg-primary text-white" style="width: 150px;">Jumlah (Rp)</th>
                     <th class="bg-primary text-white" style="width: 300px;">Keterangan</th>
@@ -65,6 +66,7 @@
                         <td class="text-center">{{ $loop->iteration }}</td>
                         <td>{{ $item->warga->nama ?? '-' }}</td>
                         <td class="text-center">{{ \Carbon\Carbon::parse($item->tanggal)->format('d-m-Y') }}</td>
+                        <td class="text-center">{{ $item->bulan_bayar }}</td>
                         <td>{{ $item->jenis }}</td>
                         <td class="text-end">Rp {{ number_format($item->jumlah, 0, ',', '.') }}</td>
                         <td>{{ $item->keterangan ?? '-' }}</td>
