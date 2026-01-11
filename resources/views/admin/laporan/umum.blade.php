@@ -192,7 +192,7 @@
 
 
     {{-- ===========================
-        3. LAPORAN PULASARA
+    3. LAPORAN PULASARA
     ============================ --}}
     <div class="card shadow mb-4">
         <div class="card-header bg-warning">
@@ -206,18 +206,32 @@
                         <th>Nama</th>
                         <th>Alamat</th>
                         <th>Jumlah Peserta</th>
+                        <th>Tanggal Bayar</th>
                         <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
                     @php $no = 1; $totalPulasara = 0; @endphp
                     @foreach($laporanPulasara as $row)
+
+                        @php
+                            // Ambil tanggal terakhir dari bulan 1-12
+                            $lastTanggal = '-';
+                            for ($i = 12; $i >= 1; $i--) {
+                                if (!empty($row['bulan'][$i]['tanggal'])) {
+                                    $lastTanggal = $row['bulan'][$i]['tanggal'];
+                                    break;
+                                }
+                            }
+                        @endphp
+
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ $row['nama'] }}</td>
                             <td>{{ $row['alamat'] }}</td>
                             <td>{{ $row['peserta'] ?? 0 }}</td>
-                            <td>Rp{{ number_format($row['total'],0,',','.') }}</td>
+                            <td>{{ $lastTanggal }}</td>
+                            <td>Rp {{ number_format($row['total'],0,',','.') }}</td>
                         </tr>
                         @php $totalPulasara += $row['total']; @endphp
                     @endforeach
@@ -225,7 +239,8 @@
                     <tr>
                         <td colspan="3" class="text-end"><strong>Total</strong></td>
                         <td><strong>{{ $totalPesertaPulasara }}</strong></td>
-                        <td><strong>Rp{{ number_format($totalPulasara,0,',','.') }}</strong></td>
+                        <td></td>
+                        <td><strong>Rp {{ number_format($totalPulasara,0,',','.') }}</strong></td>
                     </tr>
                 </tbody>
             </table>
