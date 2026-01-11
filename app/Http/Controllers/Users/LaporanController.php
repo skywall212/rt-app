@@ -11,6 +11,21 @@ use Carbon\Carbon;
 
 class LaporanController extends Controller
 {
+    protected $mapBulan = [
+        'Januari'   => 1,
+        'Februari'  => 2,
+        'Maret'     => 3,
+        'April'     => 4,
+        'Mei'       => 5,
+        'Juni'      => 6,
+        'Juli'      => 7,
+        'Agustus'   => 8,
+        'September' => 9,
+        'Oktober'   => 10,
+        'November'  => 11,
+        'Desember'  => 12,
+    ];
+
     public function index(Request $request)
     {
         $tahun = $request->input('tahun', date('Y'));
@@ -19,15 +34,14 @@ class LaporanController extends Controller
         $laporanDansos    = $this->getLaporanByJenis('Dana Sosial', $tahun);
         $laporanPulasara  = $this->getLaporanByJenis('Pulasara', $tahun);
 
-        // Hitung total peserta pulasara
         $totalPesertaPulasara = collect($laporanPulasara)->sum('peserta');
 
-        // Ambil data pengeluaran dari tabel pengeluarans
+        // Pengeluaran tetap pakai tanggal (karena tidak punya bulan_bayar)
         $laporanPengeluaran = Pengeluaran::whereYear('tanggal', $tahun)
             ->orderBy('tanggal', 'asc')
             ->get();
 
-        // ===== Summary Total =====
+        // ===== Summary Total (Pembayaran berdasarkan tahun dari tanggal) =====
         $totalSampahKeamanan = Pembayaran::where('jenis', 'Sampah Keamanan')
             ->whereYear('tanggal', $tahun)->sum('jumlah');
 
@@ -66,12 +80,10 @@ class LaporanController extends Controller
         $laporanPulasara  = $this->getLaporanByJenis('Pulasara', $tahun);
         $totalPesertaPulasara = collect($laporanPulasara)->sum('peserta');
 
-        // Ambil data pengeluaran dari tabel pengeluarans
         $laporanPengeluaran = Pengeluaran::whereYear('tanggal', $tahun)
             ->orderBy('tanggal', 'asc')
             ->get();
 
-        // ===== Summary Total =====
         $totalSampahKeamanan = Pembayaran::where('jenis', 'Sampah Keamanan')
             ->whereYear('tanggal', $tahun)->sum('jumlah');
 
@@ -118,8 +130,16 @@ class LaporanController extends Controller
             $alamat  = $pembayaran->warga->alamat ?? '-';
             $peserta = $pembayaran->peserta ?? 0;
             $jumlah  = $pembayaran->jumlah;
-            $tanggal = Carbon::parse($pembayaran->tanggal)->format('d/m/Y');
-            $bulanKe = Carbon::parse($pembayaran->tanggal)->month;
+            $tanggal = $pembayaran->tanggal
+                ? Carbon::parse($pembayaran->tanggal)->format('d/m/Y')
+                : null;
+
+            $bulanText = $pembayaran->bulan_bayar;
+            $bulanKe   = $this->mapBulan[$bulanText] ?? null;
+
+            if (!$bulanKe) {
+                continue; // skip jika bulan_bayar tidak valid
+            }
 
             if (!isset($laporan[$wargaId])) {
                 $laporan[$wargaId] = [

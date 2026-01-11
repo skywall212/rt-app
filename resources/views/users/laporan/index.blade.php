@@ -32,12 +32,10 @@
 
             {{-- Tombol Export PDF --}}
             <a href="{{ route('users.laporan.pdf', ['tahun' => $tahun]) }}"
-            class="btn btn-danger btn-sm" target="_blank">
+               class="btn btn-danger btn-sm" target="_blank">
                 <i class="bi bi-file-earmark-pdf"></i> Export PDF
             </a>
         </div>
-
-
     </div>
 
     {{-- ===========================
@@ -54,9 +52,9 @@
                         <th>No</th>
                         <th>Nama</th>
                         <th>Alamat</th>
-                        @for($i=1;$i<=12;$i++)
-                            <th>{{ strtoupper(date('M', mktime(0,0,0,$i,1))) }}</th>
-                        @endfor
+                        @foreach(['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'] as $b)
+                            <th>{{ $b }}</th>
+                        @endforeach
                         <th>Total</th>
                     </tr>
                 </thead>
@@ -67,7 +65,9 @@
                             <td>{{ $no++ }}</td>
                             <td>{{ $row['nama'] }}</td>
                             <td>{{ $row['alamat'] }}</td>
-                            @foreach($row['bulan'] as $bulan)
+
+                            @for($i=1; $i<=12; $i++)
+                                @php $bulan = $row['bulan'][$i]; @endphp
                                 <td>
                                     @if($bulan['jumlah'] > 0)
                                         Rp{{ number_format($bulan['jumlah'],0,',','.') }}<br>
@@ -76,13 +76,15 @@
                                         -
                                     @endif
                                 </td>
-                            @endforeach
+                            @endfor
+
                             <td><b>Rp {{ number_format($row['total'],0,',','.') }}</b></td>
                         </tr>
                         @php $totalSK += $row['total']; @endphp
                     @endforeach
                 </tbody>
             </table>
+
             <div class="fw-bold mt-2">
                 Total Pembayaran Sampah & Keamanan : Rp {{ number_format($totalSK,0,',','.') }}
             </div>
@@ -103,18 +105,9 @@
                         <th>No</th>
                         <th>Nama</th>
                         <th>Alamat</th>
-                        <th>Jan</th>
-                        <th>Feb</th>
-                        <th>Mar</th>
-                        <th>Apr</th>
-                        <th>Mei</th>
-                        <th>Jun</th>
-                        <th>Jul</th>
-                        <th>Agust</th>
-                        <th>Sept</th>
-                        <th>Okt</th>
-                        <th>Nov</th>
-                        <th>Des</th>
+                        @foreach(['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'] as $b)
+                            <th>{{ $b }}</th>
+                        @endforeach
                         <th>Total</th>
                     </tr>
                 </thead>
@@ -125,39 +118,34 @@
                             <td>{{ $no++ }}</td>
                             <td class="text-start">{{ $row['nama'] }}</td>
                             <td class="text-start">{{ $row['alamat'] }}</td>
-                           
-                            {{-- Loop bulan 1 - 12 --}}
-                            @for($i = 1; $i <= 12; $i++)
-                                <td>
-                                    @if(!empty($row['bulan'][$i]['jumlah']) && $row['bulan'][$i]['jumlah'] > 0)
-                                        Rp{{ number_format($row['bulan'][$i]['jumlah'], 0, ',', '.') }} <br>
-                                        <small class="text-muted">
-                                            {{ \Carbon\Carbon::hasFormat($row['bulan'][$i]['tanggal'], 'Y-m-d') 
-                                                ? \Carbon\Carbon::createFromFormat('Y-m-d', $row['bulan'][$i]['tanggal'])->format('d/m/Y') 
-                                                : $row['bulan'][$i]['tanggal'] }}
-                                        </small>
 
+                            @for($i=1; $i<=12; $i++)
+                                @php $bulan = $row['bulan'][$i]; @endphp
+                                <td>
+                                    @if($bulan['jumlah'] > 0)
+                                        Rp{{ number_format($bulan['jumlah'],0,',','.') }}<br>
+                                        <small class="text-muted">{{ $bulan['tanggal'] }}</small>
                                     @else
                                         -
                                     @endif
                                 </td>
                             @endfor
 
-                            <td><b>Rp{{ number_format($row['total'],0,',','.') }}</b></td>
+                            <td><b>Rp {{ number_format($row['total'],0,',','.') }}</b></td>
                         </tr>
                         @php $totalDansos += $row['total']; @endphp
                     @endforeach
                 </tbody>
             </table>
+
             <div class="fw-bold mt-2">
                 Total Pembayaran Dana Sosial : Rp {{ number_format($totalDansos,0,',','.') }}
             </div>
         </div>
     </div>
 
-
     {{-- ===========================
-        3. LAPORAN PULASARA
+    3. LAPORAN PULASARA
     ============================ --}}
     <div class="card shadow mb-4">
         <div class="card-header bg-warning">
@@ -171,17 +159,31 @@
                         <th>Nama</th>
                         <th>Alamat</th>
                         <th>Jumlah Peserta</th>
+                        <th>Tanggal Bayar</th>
                         <th>Total</th>
                     </tr>
                 </thead>
                 <tbody>
                     @php $no = 1; $totalPulasara = 0; @endphp
                     @foreach($laporanPulasara as $row)
+
+                        @php
+                            // Ambil tanggal terakhir dari bulan 1-12
+                            $lastTanggal = '-';
+                            for ($i = 12; $i >= 1; $i--) {
+                                if (!empty($row['bulan'][$i]['tanggal'])) {
+                                    $lastTanggal = $row['bulan'][$i]['tanggal'];
+                                    break;
+                                }
+                            }
+                        @endphp
+
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td>{{ $row['nama'] }}</td>
                             <td>{{ $row['alamat'] }}</td>
                             <td>{{ $row['peserta'] ?? 0 }}</td>
+                            <td>{{ $lastTanggal }}</td>
                             <td>Rp {{ number_format($row['total'],0,',','.') }}</td>
                         </tr>
                         @php $totalPulasara += $row['total']; @endphp
@@ -190,12 +192,14 @@
                     <tr>
                         <td colspan="3" class="text-end"><strong>Total</strong></td>
                         <td><strong>{{ $totalPesertaPulasara }}</strong></td>
+                        <td></td>
                         <td><strong>Rp {{ number_format($totalPulasara,0,',','.') }}</strong></td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
+
 
     {{-- ===========================
         4. LAPORAN PENGELUARAN
@@ -225,19 +229,22 @@
                             <td>{{ \Carbon\Carbon::parse($row->tanggal)->format('d/m/Y') }}</td>
                             <td>{{ $row->jenis }}</td>
                             <td>{{ $row->keterangan }}</td>
-                            <td>Rp{{ number_format($row->jumlah,0,',','.') }}</td>
+                            <td>Rp {{ number_format($row->jumlah,0,',','.') }}</td>
                         </tr>
                         @php $totalKeluar += $row->jumlah; @endphp
                     @endforeach
                 </tbody>
             </table>
+
             <div class="fw-bold mt-2">
                 Total Pengeluaran : Rp {{ number_format($totalKeluar,0,',','.') }}
             </div>
         </div>
     </div>
- {{-- Summary Total dalam Tabel --}}
 
+    {{-- ===========================
+        SUMMARY
+    ============================ --}}
     <div class="card shadow mb-4">
         <div class="card-header bg-danger text-white">
             <b>Total Informasi</b>
@@ -252,20 +259,25 @@
                     </tr>
                 </thead>
                 <tbody>
+                    @php
+                        $totalMasuk = $totalSampahKeamanan + $totalDanaSosial + $totalPulasara + $totalSumbangan;
+                        $saldo = $totalMasuk - $totalPengeluaran;
+                    @endphp
                     <tr>
                         <td class="text-success fw-bold">
-                            Rp {{ number_format($totalSampahKeamanan + $totalDanaSosial + $totalPulasara + $totalSumbangan, 0, ',', '.') }}
+                            Rp {{ number_format($totalMasuk, 0, ',', '.') }}
                         </td>
                         <td class="text-danger fw-bold">
                             Rp {{ number_format($totalPengeluaran, 0, ',', '.') }}
                         </td>
-                        <td class="{{ ($totalSampahKeamanan + $totalDanaSosial + $totalPulasara + $totalSumbangan - $totalPengeluaran) >= 0 ? 'text-success fw-bold' : 'text-danger fw-bold' }}">
-                            Rp {{ number_format($totalSampahKeamanan + $totalDanaSosial + $totalPulasara + $totalSumbangan - $totalPengeluaran, 0, ',', '.') }}
+                        <td class="{{ $saldo >= 0 ? 'text-success fw-bold' : 'text-danger fw-bold' }}">
+                            Rp {{ number_format($saldo, 0, ',', '.') }}
                         </td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </div>
+
 </div>
 @endsection
