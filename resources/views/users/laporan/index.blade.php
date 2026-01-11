@@ -98,52 +98,83 @@
         <div class="card-header bg-primary text-white">
             <b>Pemasukan Dana Sosial</b>
         </div>
-        <div class="card-body table-responsive">
-            <table class="table table-bordered text-center align-middle">
-                <thead class="table-primary">
-                    <tr>
-                        <th>No</th>
-                        <th>Nama</th>
-                        <th>Alamat</th>
-                        @foreach(['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'] as $b)
-                            <th>{{ $b }}</th>
-                        @endforeach
-                        <th>Total</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    @php $no=1; $totalDansos=0; @endphp
-                    @foreach($laporanDansos as $row)
+        <div class="card-body">
+            @if(!empty($laporanDansos))
+                <div style="overflow-x: auto; white-space: nowrap;">
+                    <table class="table table-bordered text-center align-middle mb-0" style="min-width: 100%; font-size: 0.85rem;">
+                    <thead class="table-primary">
                         <tr>
-                            <td>{{ $no++ }}</td>
-                            <td class="text-start">{{ $row['nama'] }}</td>
-                            <td class="text-start">{{ $row['alamat'] }}</td>
-
-                            @for($i=1; $i<=12; $i++)
-                                @php $bulan = $row['bulan'][$i]; @endphp
-                                <td>
-                                    @if($bulan['jumlah'] > 0)
-                                        Rp{{ number_format($bulan['jumlah'],0,',','.') }}<br>
-                                        <small class="text-muted">{{ $bulan['tanggal'] }}</small>
-                                    @else
-                                        -
-                                    @endif
-                                </td>
-                            @endfor
-
-                            <td><b>Rp {{ number_format($row['total'],0,',','.') }}</b></td>
+                            <th style="width: 4%;">No</th>
+                            <th style="width: 12%;">Nama</th>
+                            <th style="width: 12%;">Alamat</th>
+                            <th style="width: 6%;">Jan</th>
+                            <th style="width: 6%;">Feb</th>
+                            <th style="width: 6%;">Mar</th>
+                            <th style="width: 6%;">Apr</th>
+                            <th style="width: 6%;">Mei</th>
+                            <th style="width: 6%;">Jun</th>
+                            <th style="width: 6%;">Jul</th>
+                            <th style="width: 6%;">Agust</th>
+                            <th style="width: 6%;">Sept</th>
+                            <th style="width: 6%;">Okt</th>
+                            <th style="width: 6%;">Nov</th>
+                            <th style="width: 6%;">Des</th>
+                            <th style="width: 10%;">Total</th>
                         </tr>
-                        @php $totalDansos += $row['total']; @endphp
-                    @endforeach
-                </tbody>
-            </table>
+                    </thead>
+                    <tbody>
+                        @php $no=1; $totalDansos=0; @endphp
+                        @foreach($laporanDansos as $row)
+                            <tr>
+                                <td>{{ $no++ }}</td>
+                                <td class="text-start">{{ $row['nama'] }}</td>
+                                <td class="text-start">{{ $row['alamat'] }}</td>
+                               
+                                {{-- Loop bulan 1 - 12 --}}
+                                @for($i = 1; $i <= 12; $i++)
+                                    <td style="padding: 0.5rem 0.25rem;">
+                                        @if(!empty($row['bulan'][$i]['jumlah']) && $row['bulan'][$i]['jumlah'] > 0)
+                                            <div class="fw-bold" style="font-size: 0.8rem;">
+                                                Rp{{ number_format($row['bulan'][$i]['jumlah'], 0, ',', '.') }}
+                                            </div>
+                                            <small class="text-muted" style="font-size: 0.7rem; display: block;">
+                                                @php
+                                                    $tanggal = $row['bulan'][$i]['tanggal'];
+                                                    $formatted = '';
+                                                    
+                                                    if (\Carbon\Carbon::hasFormat($tanggal, 'Y-m-d')) {
+                                                        $formatted = \Carbon\Carbon::createFromFormat('Y-m-d', $tanggal)->format('d/m/Y');
+                                                    } else {
+                                                        $formatted = $tanggal;
+                                                    }
+                                                @endphp
+                                                {{ $formatted }}
+                                            </small>
 
-            <div class="fw-bold mt-2">
-                Total Pembayaran Dana Sosial : Rp {{ number_format($totalDansos,0,',','.') }}
-            </div>
+                                        @else
+                                            -
+                                        @endif
+                                    </td>
+                                @endfor
+
+                                <td style="padding: 0.5rem;"><b>Rp{{ number_format($row['total'],0,',','.') }}</b></td>
+                            </tr>
+                            @php $totalDansos += $row['total']; @endphp
+                        @endforeach
+                    </tbody>
+                    </table>
+                </div>
+                <div class="fw-bold mt-3">
+                    Total Pembayaran Dana Sosial : Rp{{ number_format($totalDansos,0,',','.') }}
+                </div>
+            @else
+                <div class="alert alert-info mb-0">
+                    <i class="bi bi-info-circle"></i> Belum ada data pembayaran
+                </div>
+            @endif
         </div>
     </div>
-
+    
     {{-- ===========================
     3. LAPORAN PULASARA
     ============================ --}}
