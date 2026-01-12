@@ -12,7 +12,7 @@
     </style>
 </head>
 <body>
-    <h3>Laporan Pembayaran RW.XX</h3>
+    <h3>Laporan Pembayaran RT.04</h3>
 
     <table>
         <thead>
