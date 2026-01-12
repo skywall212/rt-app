@@ -286,6 +286,42 @@
             </div>
         </div>
     </div>
+    {{-- ===========================
+        5. Total Saldo Akhir
+    ============================ --}}
+    @php
+        $totalPemasukan = ($totalSK ?? 0) + ($totalDansos ?? 0) + ($totalPulasara ?? 0);
+        $totalPengeluaran = $totalKeluar ?? 0;
+        $saldoAkhir = $totalPemasukan - $totalPengeluaran;
+    @endphp
+
+    <div class="card shadow mb-4">
+        <div class="card-header bg-dark text-white">
+            <b>Rekapitulasi Keuangan Tahun {{ $tahun }}</b>
+        </div>
+        <div class="card-body">
+            <table class="table table-bordered mb-0">
+                <tr>
+                    <th style="width: 40%">Total Pemasukan</th>
+                    <td class="text-end fw-bold text-success">
+                        Rp{{ number_format($totalPemasukan, 0, ',', '.') }}
+                    </td>
+                </tr>
+                <tr>
+                    <th>Total Pengeluaran</th>
+                    <td class="text-end fw-bold text-danger">
+                        Rp{{ number_format($totalPengeluaran, 0, ',', '.') }}
+                    </td>
+                </tr>
+                <tr class="table-secondary">
+                    <th>Saldo Akhir</th>
+                    <td class="text-end fw-bold">
+                        Rp{{ number_format($saldoAkhir, 0, ',', '.') }}
+                    </td>
+                </tr>
+            </table>
+        </div>
+    </div>
 
 </div>
 @endsection

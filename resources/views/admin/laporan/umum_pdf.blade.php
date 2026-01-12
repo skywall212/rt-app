@@ -220,6 +220,38 @@
     <div class="summary">
         Total Pengeluaran : Rp{{ number_format($totalKeluar,0,',','.') }}
     </div>
+    {{-- ===========================
+        5. TOTAL SALDO AKHIR
+    ============================ --}}
+    @php
+        $totalPemasukan = ($totalSK ?? 0) + ($totalDansos ?? 0) + ($totalPulasara ?? 0);
+        $totalPengeluaran = $totalKeluar ?? 0;
+        $saldoAkhir = $totalPemasukan - $totalPengeluaran;
+    @endphp
+
+    <br>
+    <div class="section-title">Rekapitulasi Keuangan Tahun {{ $tahun }}</div>
+
+    <table>
+        <tr>
+            <th style="width:60%; text-align:left;">Total Pemasukan</th>
+            <td class="text-end" style="font-weight:bold;">
+                Rp{{ number_format($totalPemasukan,0,',','.') }}
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align:left;">Total Pengeluaran</th>
+            <td class="text-end" style="font-weight:bold;">
+                Rp{{ number_format($totalPengeluaran,0,',','.') }}
+            </td>
+        </tr>
+        <tr>
+            <th style="text-align:left; background:#eee;">Saldo Akhir</th>
+            <td class="text-end" style="font-weight:bold; background:#eee;">
+                Rp{{ number_format($saldoAkhir,0,',','.') }}
+            </td>
+        </tr>
+    </table>
 
 </body>
 </html>
