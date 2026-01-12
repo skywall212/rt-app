@@ -35,73 +35,69 @@
     </div>
 
     {{-- ===========================
-     1. LAPORAN SAMPAH & KEAMANAN
+        1. LAPORAN SAMPAH & KEAMANAN
     ============================ --}}
     <div class="card shadow mb-4">
         <div class="card-header bg-success text-white">
             <b>Pemasukan Sampah & Keamanan</b>
         </div>
-
         <div class="card-body table-responsive">
-            <table class="table table-bordered text-center align-middle">
+            <div style="overflow-x: auto; white-space: nowrap;">
+                <table class="table table-bordered text-center align-middle mb-0" style="min-width: 100%; font-size: 0.85rem;">
+
                 <thead class="table-success">
                     <tr>
-                        <th>No</th>
-                        <th>Nama</th>
-                        <th>Alamat</th>
-                        @for($i = 1; $i <= 12; $i++)
-                            <th>{{ strtoupper(date('M', mktime(0,0,0,$i,1))) }}</th>
-                        @endfor
-                        <th>Total</th>
+                          <th style="width: 4%;">No</th>
+                            <th style="width: 12%;">Nama</th>
+                            <th style="width: 12%;">Alamat</th>
+                            <th style="width: 6%;">Jan</th>
+                            <th style="width: 6%;">Feb</th>
+                            <th style="width: 6%;">Mar</th>
+                            <th style="width: 6%;">Apr</th>
+                            <th style="width: 6%;">Mei</th>
+                            <th style="width: 6%;">Jun</th>
+                            <th style="width: 6%;">Jul</th>
+                            <th style="width: 6%;">Agust</th>
+                            <th style="width: 6%;">Sept</th>
+                            <th style="width: 6%;">Okt</th>
+                            <th style="width: 6%;">Nov</th>
+                            <th style="width: 6%;">Des</th>
+                            <th style="width: 10%;">Total</th>
                     </tr>
                 </thead>
-
                 <tbody>
-                    @php $no = 1; $totalSK = 0; @endphp
-
-                    @forelse($laporanSK as $row)
+                    @php $no=1; $totalSK=0; @endphp
+                    @foreach($laporanSK as $row)
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td class="text-start">{{ $row['nama'] }}</td>
                             <td class="text-center">{{ $row['alamat'] }}</td>
 
-                            @for($i = 1; $i <= 12; $i++)
-                                <td>
-                                    @if($row['bulan'][$i]['jumlah'] > 0)
-                                        <div class="fw-bold">
-                                            Rp{{ number_format($row['bulan'][$i]['jumlah'],0,',','.') }}
-                                        </div>
-                                        @if($row['bulan'][$i]['tanggal'])
-                                            <small class="text-muted">
-                                                {{ $row['bulan'][$i]['tanggal'] }}
-                                            </small>
-                                        @endif
+                            @for($i=1; $i<=12; $i++)
+                                @php $bulan = $row['bulan'][$i]; @endphp
+                                <td style="padding: 0.5rem 0.25rem;">
+                                    @if($bulan['jumlah'] > 0)
+                                        <span style="color:#000; font-weight:600;">
+                                            Rp{{ number_format($bulan['jumlah'],0,',','.') }}
+                                        </span><br>
+                                        <small style="color:#555;">{{ $bulan['tanggal'] }}</small>
                                     @else
                                         -
                                     @endif
                                 </td>
                             @endfor
 
-                            <td>
-                                <b>Rp{{ number_format($row['total'],0,',','.') }}</b>
-                            </td>
+                            <td><b>Rp {{ number_format($row['total'],0,',','.') }}</b></td>
                         </tr>
-
                         @php $totalSK += $row['total']; @endphp
-                    @empty
-                        <tr>
-                            <td colspan="16" class="text-muted text-center">
-                                Belum ada data pembayaran
-                            </td>
-                        </tr>
-                    @endforelse
+                    @endforeach
                 </tbody>
             </table>
 
             <div class="fw-bold mt-2">
-                Total Pembayaran Sampah & Keamanan :
-                Rp{{ number_format($totalSK,0,',','.') }}
+                Total Pembayaran Sampah & Keamanan : Rp {{ number_format($totalSK,0,',','.') }}
             </div>
+        </div>
         </div>
     </div>
 
