@@ -2,7 +2,24 @@
 
 @section('content')
 <div class="container-fluid mt-3">
-    <h4 class="mb-3">📊 Dashboard - Pembayaran dan Pengeluaran</h4>
+    <div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0">📊 Dashboard - Pembayaran & Pengeluaran Tahun {{ $tahun }}</h4>
+
+    <form method="GET" action="{{ route('admin.dashboard') }}" class="d-flex">
+        <select name="tahun" class="form-select form-select-sm" onchange="this.form.submit()">
+            @php
+                $currentYear = date('Y');
+                $startYear = $currentYear - 5;
+                $endYear = $currentYear + 1;
+            @endphp
+            @for($y = $startYear; $y <= $endYear; $y++)
+                <option value="{{ $y }}" {{ $tahun == $y ? 'selected' : '' }}>
+                    {{ $y }}
+                </option>
+            @endfor
+        </select>
+    </form>
+</div>
 
     {{-- Summary Cards --}}
     <div class="row mb-3">
