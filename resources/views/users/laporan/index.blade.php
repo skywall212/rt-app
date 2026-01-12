@@ -46,16 +46,27 @@
             <b>Pemasukan Sampah & Keamanan</b>
         </div>
         <div class="card-body table-responsive">
-            <table class="table table-bordered text-center align-middle">
+            <div style="overflow-x: auto; white-space: nowrap;">
+                <table class="table table-bordered text-center align-middle mb-0" style="min-width: 100%; font-size: 0.85rem;">
+
                 <thead class="table-success">
                     <tr>
-                        <th>No</th>
-                        <th>Nama</th>
-                        <th>Alamat</th>
-                        @foreach(['Jan','Feb','Mar','Apr','Mei','Jun','Jul','Ags','Sep','Okt','Nov','Des'] as $b)
-                            <th>{{ $b }}</th>
-                        @endforeach
-                        <th>Total</th>
+                          <th style="width: 4%;">No</th>
+                            <th style="width: 12%;">Nama</th>
+                            <th style="width: 12%;">Alamat</th>
+                            <th style="width: 6%;">Jan</th>
+                            <th style="width: 6%;">Feb</th>
+                            <th style="width: 6%;">Mar</th>
+                            <th style="width: 6%;">Apr</th>
+                            <th style="width: 6%;">Mei</th>
+                            <th style="width: 6%;">Jun</th>
+                            <th style="width: 6%;">Jul</th>
+                            <th style="width: 6%;">Agust</th>
+                            <th style="width: 6%;">Sept</th>
+                            <th style="width: 6%;">Okt</th>
+                            <th style="width: 6%;">Nov</th>
+                            <th style="width: 6%;">Des</th>
+                            <th style="width: 10%;">Total</th>
                     </tr>
                 </thead>
                 <tbody>
@@ -63,15 +74,17 @@
                     @foreach($laporanSK as $row)
                         <tr>
                             <td>{{ $no++ }}</td>
-                            <td>{{ $row['nama'] }}</td>
-                            <td>{{ $row['alamat'] }}</td>
+                            <td class="text-start">{{ $row['nama'] }}</td>
+                            <td class="text-center">{{ $row['alamat'] }}</td>
 
                             @for($i=1; $i<=12; $i++)
                                 @php $bulan = $row['bulan'][$i]; @endphp
-                                <td>
+                                <td style="padding: 0.5rem 0.25rem;">
                                     @if($bulan['jumlah'] > 0)
-                                        Rp{{ number_format($bulan['jumlah'],0,',','.') }}<br>
-                                        <small>{{ $bulan['tanggal'] }}</small>
+                                        <span style="color:#000; font-weight:600;">
+                                            Rp{{ number_format($bulan['jumlah'],0,',','.') }}
+                                        </span><br>
+                                        <small style="color:#555;">{{ $bulan['tanggal'] }}</small>
                                     @else
                                         -
                                     @endif
@@ -88,6 +101,7 @@
             <div class="fw-bold mt-2">
                 Total Pembayaran Sampah & Keamanan : Rp {{ number_format($totalSK,0,',','.') }}
             </div>
+        </div>
         </div>
     </div>
 
@@ -128,7 +142,7 @@
                             <tr>
                                 <td>{{ $no++ }}</td>
                                 <td class="text-start">{{ $row['nama'] }}</td>
-                                <td class="text-start">{{ $row['alamat'] }}</td>
+                                <td class="text-center">{{ $row['alamat'] }}</td>
                                
                                 {{-- Loop bulan 1 - 12 --}}
                                 @for($i = 1; $i <= 12; $i++)
