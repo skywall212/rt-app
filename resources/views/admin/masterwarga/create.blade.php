@@ -28,7 +28,7 @@
         </div>
 
         <div class="mb-3">
-            <label class="form-label">Alamat</label>
+            <label class="form-label">Alamat (Contoh: G8/12)</label>
             <textarea name="alamat" class="form-control" required></textarea>
         </div>
 
