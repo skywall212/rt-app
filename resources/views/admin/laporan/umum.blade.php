@@ -227,7 +227,7 @@
 
                         <tr>
                             <td>{{ $no++ }}</td>
-                            <td>{{ $row['nama'] }}</td>
+                            <td class="text-start">{{ $row['nama'] }}</td>
                             <td>{{ $row['alamat'] }}</td>
                             <td>{{ $row['peserta'] ?? 0 }}</td>
                             <td>{{ $lastTanggal }}</td>
