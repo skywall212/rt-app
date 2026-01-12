@@ -220,6 +220,7 @@
     <div class="summary">
         Total Pengeluaran : Rp{{ number_format($totalKeluar,0,',','.') }}
     </div>
+    
     {{-- ===========================
         5. TOTAL SALDO AKHIR
     ============================ --}}

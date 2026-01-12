@@ -63,7 +63,7 @@
                         <tr>
                             <td>{{ $no++ }}</td>
                             <td class="text-start">{{ $row['nama'] }}</td>
-                            <td class="text-start">{{ $row['alamat'] }}</td>
+                            <td class="text-center">{{ $row['alamat'] }}</td>
 
                             @for($i = 1; $i <= 12; $i++)
                                 <td>
@@ -142,7 +142,7 @@
                             <tr>
                                 <td>{{ $no++ }}</td>
                                 <td class="text-start">{{ $row['nama'] }}</td>
-                                <td class="text-start">{{ $row['alamat'] }}</td>
+                                <td class="text-center">{{ $row['alamat'] }}</td>
                                
                                 {{-- Loop bulan 1 - 12 --}}
                                 @for($i = 1; $i <= 12; $i++)
@@ -286,6 +286,7 @@
             </div>
         </div>
     </div>
+
     {{-- ===========================
         5. Total Saldo Akhir
     ============================ --}}
