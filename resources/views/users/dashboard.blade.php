@@ -158,8 +158,8 @@
 
     const pemasukanColors = [
         '#007bff', // biru
-        '#28a745', // hijau
         '#ffc107', // kuning
+        '#28a745', // hijau
         '#6f42c1', // ungu
         '#20c997', // teal
         '#fd7e14', // oranye
