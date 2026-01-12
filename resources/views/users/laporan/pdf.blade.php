@@ -24,7 +24,7 @@
 </head>
 <body>
 
-    <h3>Laporan Semester Tahun {{ $tahun }}</h3>
+    <h3>Laporan Keuangan Tahun {{ $tahun }}</h3>
 
          
     {{-- ===========================
