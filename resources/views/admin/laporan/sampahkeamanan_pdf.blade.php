@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <title>Laporan Sampah Keamanan {{ $tahun }}</title>
     <style>
-        body { font-family: sans-serif; font-size: 12px; }
+        body { font-family: sans-serif; font-size: 10px; }
         table { width: 100%; border-collapse: collapse; margin-top: 10px; }
         th, td { border: 1px solid #000; padding: 5px; text-align: center; }
         th { background-color: #ddd; }
@@ -32,7 +32,7 @@
             <tr>
                 <td>{{ $index + 1 }}</td>
                 <td class="left">{{ $item['nama'] }}</td>
-                <td class="left">{{ $item['alamat'] }}</td>
+                <td class="center">{{ $item['alamat'] }}</td>
                 @foreach($item['bulan'] as $bulan)
                     <td>
                         @if($bulan['jumlah'] > 0)
