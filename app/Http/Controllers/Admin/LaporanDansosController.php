@@ -116,10 +116,31 @@ class LaporanDansosController extends Controller
                 ->filter(fn ($b) => $b['jumlah'] > 0)
                 ->count();
         }
-
+        // urutkan berdasarkan blok dan nomor rumah
         return collect($laporan)
-            ->sortBy('nama')
-            ->values()
-            ->toArray();
+        ->sortBy(function ($item) {
+            // contoh alamat: G8/12
+            $alamat = $item['alamat'];
+
+            if (preg_match('/([A-Z]+)(\d+)\/(\d+)/i', $alamat, $m)) {
+                // $m[1] = huruf (G)
+                // $m[2] = blok (8, 9, dst)
+                // $m[3] = nomor rumah (1..20)
+
+                return sprintf(
+                    '%s-%03d-%03d',
+                    strtoupper($m[1]),
+                    (int) $m[2],
+                    (int) $m[3]
+                );
+            }
+
+            // fallback jika format tidak sesuai
+            return $alamat;
+        })
+        ->values()
+        ->toArray();
+
+
     }
 }
