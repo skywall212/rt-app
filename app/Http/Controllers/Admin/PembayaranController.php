@@ -49,17 +49,25 @@ class PembayaranController extends Controller
             'bukti_bayar'      => 'nullable|image|max:2048',
         ]);
 
-        // Cegah double bayar Pulasara
+       // Cegah double bayar Pulasara per bulan & tahun
         if ($validated['jenis'] === 'Pulasara') {
+
+            $tanggal = \Carbon\Carbon::parse($validated['tanggal']);
+            $tahun   = $tanggal->year;
+            $bulan   = $validated['bulan_bayar'];
+
             $sudahBayar = Pembayaran::where('warga_id', $validated['warga_id'])
                 ->where('jenis', 'Pulasara')
+                ->whereYear('tanggal', $tahun)
+                ->where('bulan_bayar', $bulan)
                 ->exists();
 
             if ($sudahBayar) {
                 return back()->withInput()
-                    ->with('warning', '❗ Pulasara sudah dibayarkan.');
+                    ->with('warning', "❗ Pulasara bulan {$bulan} tahun {$tahun} sudah dibayarkan.");
             }
         }
+
 
         // Cegah double bayar bulanan (SK & DS)
         if (in_array($validated['jenis'], ['Sampah Keamanan', 'Dana Sosial'])) {
