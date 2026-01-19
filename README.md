@@ -30,7 +30,7 @@ cd rt-app
 ### 2. Install Dependencies
 ```
 composer install
-npm install && npm run dev
+npm install && npm run build && npm run dev
 ```
 ### 3. Setup Environment
 ```
