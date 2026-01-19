@@ -72,7 +72,7 @@ server {
 ```
 ## 📂 Project Structure
 ```
-ujski/
+rt-app/
 ├── app/ # Core application (Controllers, Models, etc.)
 ├── bootstrap/
 ├── config/ # Configuration files
